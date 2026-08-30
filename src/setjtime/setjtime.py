@@ -5,6 +5,8 @@ import requests
 from datetime import date
 from requests.auth import HTTPBasicAuth
 from colored import Fore, Style
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 sys.stdout.reconfigure(encoding="utf-8")  # type: ignore
 sys.stderr.reconfigure(encoding="utf-8")  # type: ignore
@@ -78,7 +80,7 @@ def connect_jira(payload: dict, issue_id: int):
     url = URL.format(JIRA_DOMAIN, ticket_key)
 
     auth = HTTPBasicAuth(JIRA_EMAIL, JIRA_API_TOKEN)
-    response = requests.post(url, auth=auth, headers=HEADERS, json=payload)
+    response = requests.post(url, auth=auth, headers=HEADERS, json=payload,verify=False)
 
     if response.status_code == 201:
         print(f"Worklog entry added successfully to {ticket_key}.")
